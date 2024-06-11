@@ -1,9 +1,11 @@
 
-val kotlin_version: String by project
-val logback_version: String by project
-val exposed_version: String by project
-val h2_version: String by project
-val junit_version: String by project
+val kotlinVersion: String = "2.0.0"
+val logbackVersion: String = "1.4.14"
+val exposedVersion: String = "0.41.1"
+val h2Version: String = "2.1.214"
+val junitVersion: String = "5.11.0-M2"
+val koinVersion: String = "3.5.6"
+val ktorVersion: String = "2.3.11"
 
 plugins {
     kotlin("jvm") version "2.0.0"
@@ -27,17 +29,20 @@ repositories {
 
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-    implementation("com.h2database:h2:$h2_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("com.h2database:h2:$h2Version")
     implementation("io.ktor:ktor-server-host-common-jvm")
     implementation("io.ktor:ktor-server-auth-jvm")
     implementation("io.ktor:ktor-server-auth-jwt-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-config-yaml")
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
+
     testImplementation("io.ktor:ktor-server-tests-jvm")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 }

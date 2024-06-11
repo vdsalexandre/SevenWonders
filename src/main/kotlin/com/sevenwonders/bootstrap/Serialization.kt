@@ -1,4 +1,4 @@
-package com.sevenwonders.plugins
+package com.sevenwonders.bootstrap
 
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
