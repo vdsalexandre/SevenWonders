@@ -1,23 +1,22 @@
 package com.sevenwonders.api.resource
 
-import com.sevenwonders.utils.Utils.getCardsFromDirectory
+import com.sevenwonders.domain.service.CardServiceAdapter
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
-import io.ktor.server.http.content.staticFiles
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import java.io.File
+import org.koin.ktor.ext.inject
 
 fun Application.configureCardsResource() {
 
+    val cardService: CardServiceAdapter by inject()
+
     routing {
         get("/") {
-            val cards = getCardsFromDirectory("/static/im")
+            val cards = cardService.getAllCards()
             call.respond(HttpStatusCode.OK, cards)
         }
-
-        staticFiles("/static", File("im"))
     }
 }

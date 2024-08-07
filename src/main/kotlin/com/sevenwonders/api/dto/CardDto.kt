@@ -1,16 +1,17 @@
 package com.sevenwonders.api.dto
 
+import com.sevenwonders.domain.model.Card
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class CardDto(
-    val age: AgeDto,
-    val color: ColorDto,
+    val age: Card.Age,
+    val color: Card.Color,
     val name: String,
-    val gives: CardGiveDto,
+    val gives: String,
+    val givesQuantity: Int,
     val players: Int,
     val cost: Int
-) {
-    data class CardGiveDto(var quantity: Int, var give: String)
+)
 
-    enum class AgeDto { I, II, III }
-
-    enum class ColorDto { BRUN, JAUNE, VERT, GRIS, BLEU, ROUGE, VIOLET }
-}
+fun Card.toDto() = CardDto(age, color, name, gives, giveQuantity, players, cost)
