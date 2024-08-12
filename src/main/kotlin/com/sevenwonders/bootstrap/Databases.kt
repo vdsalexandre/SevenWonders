@@ -41,6 +41,7 @@ fun Application.configureDatabases() {
             CityDB.Cities.insert {
                 it[name] = city.name
                 it[face] = city.face
+                it[wonders] = listOf("").joinToString("-")
             }
         }
     }

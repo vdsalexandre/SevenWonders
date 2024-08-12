@@ -1,6 +1,7 @@
 package com.sevenwonders.domain.repository
 
 import com.sevenwonders.domain.model.City
+import com.sevenwonders.domain.model.toWonder
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
@@ -17,6 +18,7 @@ class CityDB {
         val id = integer("id").autoIncrement()
         val name = varchar("name", length = 30)
         val face = char("face")
+        val wonders = text("wonders")
 
         override val primaryKey = PrimaryKey(id)
     }
@@ -37,7 +39,8 @@ class CityDB {
                 .map {
                     City(
                         it[Cities.name],
-                        it[Cities.face]
+                        it[Cities.face],
+                        it[Cities.wonders].toWonder()
                     )
                 }
                 .singleOrNull()
@@ -50,7 +53,8 @@ class CityDB {
                 .map {
                     City(
                         it[Cities.name],
-                        it[Cities.face]
+                        it[Cities.face],
+                        it[Cities.wonders].toWonder()
                     )
                 }
         }

@@ -1,5 +1,6 @@
 package com.sevenwonders.api.resource
 
+import com.sevenwonders.api.dto.toDto
 import com.sevenwonders.domain.service.CardServiceAdapter
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -15,7 +16,7 @@ fun Application.configureCardsResource() {
 
     routing {
         get("/") {
-            val cards = cardService.getAllCards()
+            val cards = cardService.getAllCards().map { it.toDto() }
             call.respond(HttpStatusCode.OK, cards)
         }
     }

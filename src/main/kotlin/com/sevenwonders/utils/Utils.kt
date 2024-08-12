@@ -4,6 +4,7 @@ import com.sevenwonders.domain.model.Card
 import com.sevenwonders.domain.model.Card.Age
 import com.sevenwonders.domain.model.Card.Color
 import com.sevenwonders.domain.model.City
+import com.sevenwonders.domain.model.toWonder
 import java.io.File
 
 object Utils {
@@ -20,11 +21,22 @@ object Utils {
                 val data = file.name.removeSuffix(".jpg").removePrefix("city_").split("_")
                 cities.add(City(
                     name = data[0],
-                    face = data[1].toCharArray().first()
+                    face = data[1].toCharArray().first(),
+                    wonders = listOf()
                 ))
             }
         }
         return cities
+    }
+
+    fun convertCity(cityName: String): City {
+        val data = cityName.removePrefix("city_").removeSuffix(".jpg").split("_")
+
+        return City(
+            name = data[0],
+            face = data[1].toCharArray().first(),
+            wonders = data[2].toWonder()
+        )
     }
 
     fun getCardsFromDirectory(directory: String): List<Card> {

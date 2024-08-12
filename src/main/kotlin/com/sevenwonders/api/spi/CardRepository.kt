@@ -1,7 +1,7 @@
 package com.sevenwonders.api.spi
 
-import com.sevenwonders.api.dto.CardDto
+import com.sevenwonders.domain.model.Card
 
 interface CardRepository {
-    suspend fun getAllCards(): List<CardDto>
+    suspend fun getAllCards(): List<Card>
 }

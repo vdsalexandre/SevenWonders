@@ -1,11 +1,12 @@
 
-val kotlinVersion: String = "2.0.0"
 val logbackVersion: String = "1.4.14"
 val exposedVersion: String = "0.41.1"
 val h2Version: String = "2.1.214"
-val junitVersion: String = "5.11.0-M2"
-val koinVersion: String = "3.5.6"
+val junitVersion: String = "5.11.0-RC1"
+val koinVersion: String = "4.0.0-RC1"
 val ktorVersion: String = "2.3.11"
+val kotlinVersion: String = "1.8.0"
+val assertkVersion: String = "0.28.1"
 
 plugins {
     kotlin("jvm") version "2.0.0"
@@ -44,6 +45,22 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koinVersion")
     implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
 
-    testImplementation("io.ktor:ktor-server-tests-jvm")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+    testImplementation("io.insert-koin:koin-test-junit5:$koinVersion")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
+
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
