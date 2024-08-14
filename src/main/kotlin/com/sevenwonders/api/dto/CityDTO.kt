@@ -6,7 +6,18 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CityDTO(
     val name: String,
-    val face: Char
-)
+    val resource: String,
+    val face: Char,
+    val wonders: List<WonderDTO>
+) {
+    @Serializable
+    data class WonderDTO(
+        val level: Int,
+        val cost: String,
+        val gives: String
+    )
+}
 
-fun City.toDto() = CityDTO(name, face)
+fun City.toDto() = CityDTO(name, resource, face, wonders.toDto())
+
+fun List<City.Wonder>.toDto() = this.map { CityDTO.WonderDTO(it.level, it.cost, it.gives) }

@@ -49,7 +49,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.insert-koin:koin-test-junit5:$koinVersion")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
 
@@ -57,10 +56,4 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }

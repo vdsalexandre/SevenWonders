@@ -1,7 +1,7 @@
 package com.sevenwonders.domain.repository
 
 import com.sevenwonders.domain.model.City
-import com.sevenwonders.domain.model.toWonder
+import com.sevenwonders.utils.Utils.toWonder
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
@@ -17,6 +17,7 @@ class CityDB {
     object Cities : Table() {
         val id = integer("id").autoIncrement()
         val name = varchar("name", length = 30)
+        val resource = varchar("resource", length = 30)
         val face = char("face")
         val wonders = text("wonders")
 
@@ -29,21 +30,22 @@ class CityDB {
     suspend fun create(city: City): String = dbQuery {
         Cities.insert {
             it[name] = city.name
+            it[resource] = city.resource
             it[face] = city.face
         }[Cities.name]
     }
 
-    suspend fun read(id: Int): City? {
+    suspend fun read(name: String): List<City> {
         return dbQuery {
-            Cities.select { Cities.id eq id }
+            Cities.select { Cities.name eq name }
                 .map {
                     City(
                         it[Cities.name],
+                        it[Cities.resource],
                         it[Cities.face],
                         it[Cities.wonders].toWonder()
                     )
                 }
-                .singleOrNull()
         }
     }
 
@@ -53,6 +55,7 @@ class CityDB {
                 .map {
                     City(
                         it[Cities.name],
+                        it[Cities.resource],
                         it[Cities.face],
                         it[Cities.wonders].toWonder()
                     )
@@ -64,6 +67,7 @@ class CityDB {
         dbQuery {
             Cities.update({ Cities.id eq id }) {
                 it[name] = city.name
+                it[resource] = city.resource
                 it[face] = city.face
             }
         }

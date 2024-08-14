@@ -40,8 +40,10 @@ fun Application.configureDatabases() {
         cities.forEach { city ->
             CityDB.Cities.insert {
                 it[name] = city.name
+                it[resource] = city.resource
                 it[face] = city.face
-                it[wonders] = listOf("").joinToString("-")
+                it[wonders] = city.wonders
+//                it[wonders] = city.wonders.joinToString(separator = "@")
             }
         }
     }
