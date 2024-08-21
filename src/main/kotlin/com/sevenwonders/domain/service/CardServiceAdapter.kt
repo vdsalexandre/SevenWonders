@@ -11,4 +11,8 @@ class CardServiceAdapter : CardRepository {
     override suspend fun getAllCards(): List<Card> {
         return cardDBService.readAll()
     }
+
+    override suspend fun getCardsBy(color: Card.Color): List<Card> {
+        return cardDBService.readBy(color)
+    }
 }

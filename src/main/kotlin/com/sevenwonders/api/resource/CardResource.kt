@@ -1,6 +1,7 @@
 package com.sevenwonders.api.resource
 
 import com.sevenwonders.api.dto.toDto
+import com.sevenwonders.domain.model.Card
 import com.sevenwonders.domain.service.CardServiceAdapter
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -18,6 +19,15 @@ fun Application.configureCardsResource() {
         get("/") {
             val cards = cardService.getAllCards().map { it.toDto() }
             call.respond(HttpStatusCode.OK, cards)
+        }
+
+        get("/color/{color}") {
+            val c = call.parameters["color"]
+
+            if (!c.isNullOrEmpty()){
+                val cards = cardService.getCardsBy(Card.Color.valueOf(c.uppercase())).map { it.toDto() }
+                call.respond(HttpStatusCode.OK, cards)
+            }
         }
     }
 }

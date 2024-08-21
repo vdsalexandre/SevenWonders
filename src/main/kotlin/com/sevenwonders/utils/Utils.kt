@@ -48,8 +48,14 @@ object Utils {
         }
     }
 
-    fun getCardsFromDirectory(dir: File): List<Card> {
+    fun String.toElement(): String {
+        return convertElement(this)
+    }
+
+    fun getCardsFromDirectory(directory: String): List<Card> {
         val cards: MutableList<Card> = mutableListOf()
+        val directoryPath = getFileOrDirPath(directory)
+        val dir = File(directoryPath)
         val files = dir.listFiles()?.filter { it.isFile }
 
         if (!files.isNullOrEmpty()) {

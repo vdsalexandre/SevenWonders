@@ -6,7 +6,6 @@ import com.sevenwonders.domain.repository.CityDB
 import com.sevenwonders.utils.Utils.getCardsFromDirectory
 import com.sevenwonders.utils.Utils.getCitiesFromDirectory
 import io.ktor.server.application.Application
-import java.io.File
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
@@ -25,7 +24,7 @@ fun Application.configureDatabases() {
         SchemaUtils.create(CardDB.Cards)
         SchemaUtils.create(CityDB.Cities)
 
-        val cards = getCardsFromDirectory(File("/im/cards"))
+        val cards = getCardsFromDirectory("/im/cards")
         for (card in cards) {
             CardDB.Cards.insert {
                 it[age] = card.age

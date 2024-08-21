@@ -2,6 +2,7 @@ package com.sevenwonders.domain.repository
 
 import com.sevenwonders.domain.model.Card
 import com.sevenwonders.domain.model.SevenUserDB
+import com.sevenwonders.utils.Utils.toElement
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
@@ -69,8 +70,25 @@ class CardDB {
                         it[Cards.color],
                         it[Cards.name],
                         it[Cards.players],
-                        it[Cards.cost],
-                        it[Cards.gives],
+                        it[Cards.cost].toElement(),
+                        it[Cards.gives].toElement(),
+                        it[Cards.freeConstructions],
+                    )
+                }
+        }
+    }
+
+    suspend fun readBy(color: Card.Color): List<Card> {
+        return dbQuery {
+            Cards.select { Cards.color eq color }
+                .map {
+                    Card(
+                        it[Cards.age],
+                        it[Cards.color],
+                        it[Cards.name],
+                        it[Cards.players],
+                        it[Cards.cost].toElement(),
+                        it[Cards.gives].toElement(),
                         it[Cards.freeConstructions],
                     )
                 }
