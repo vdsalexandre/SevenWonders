@@ -5,13 +5,31 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CardDto(
-    val age: Card.Age,
-    val color: Card.Color,
+    val age: AgeDTO,
+    val color: ColorDTO,
     val name: String,
-    val gives: String,
-    val givesQuantity: Int,
     val players: Int,
-    val cost: Int
-)
+    val cost: String,
+    val gives: String,
+    val freeConstructions: String
+) {
+    enum class AgeDTO {
+        I, II, III
+    }
 
-fun Card.toDto() = CardDto(age, color, name, gives, giveQuantity, players, cost)
+    enum class ColorDTO {
+        BRUN, GRIS, JAUNE, VERT, BLEU, ROUGE, VIOLET
+    }
+}
+
+fun Card.toDto(): CardDto {
+    return CardDto(
+        CardDto.AgeDTO.valueOf(age.name),
+        CardDto.ColorDTO.valueOf(color.name),
+        name,
+        players,
+        cost,
+        gives,
+        freeConstructions
+    )
+}

@@ -27,5 +27,14 @@ fun Application.configureCitiesResource() {
                 call.respond(HttpStatusCode.OK, cities.map { it.toDto() })
             }
         }
+
+        get("/cities/face/{face}") {
+            val face = call.parameters["face"]?.toCharArray()?.get(0)
+
+            if (face != null ){
+                val cities = cityService.getCityBy(face)
+                call.respond(HttpStatusCode.OK, cities.map { it.toDto() })
+            }
+        }
     }
 }

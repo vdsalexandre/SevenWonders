@@ -3,19 +3,16 @@ package com.sevenwonders.domain.repository
 import com.sevenwonders.domain.model.City
 import com.sevenwonders.utils.Utils.toWonder
 import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.update
 
 class CityDB {
 
     object Cities : Table() {
-        val id = integer("id").autoIncrement()
+        private val id = integer("id").autoIncrement()
         val name = varchar("name", length = 30)
         val resource = varchar("resource", length = 30)
         val face = char("face")
@@ -32,12 +29,27 @@ class CityDB {
             it[name] = city.name
             it[resource] = city.resource
             it[face] = city.face
+            it[wonders] = city.wonders.joinToString("@")
         }[Cities.name]
     }
 
     suspend fun read(name: String): List<City> {
         return dbQuery {
             Cities.select { Cities.name eq name }
+                .map {
+                    City(
+                        it[Cities.name],
+                        it[Cities.resource],
+                        it[Cities.face],
+                        it[Cities.wonders].toWonder()
+                    )
+                }
+        }
+    }
+
+    suspend fun readBy(face: Char): List<City> {
+        return dbQuery {
+            Cities.select { Cities.face eq face }
                 .map {
                     City(
                         it[Cities.name],
@@ -60,22 +72,6 @@ class CityDB {
                         it[Cities.wonders].toWonder()
                     )
                 }
-        }
-    }
-
-    suspend fun update(id: Int, city: City) {
-        dbQuery {
-            Cities.update({ Cities.id eq id }) {
-                it[name] = city.name
-                it[resource] = city.resource
-                it[face] = city.face
-            }
-        }
-    }
-
-    suspend fun delete(id: Int) {
-        dbQuery {
-            CardDB.Cards.deleteWhere { Cities.id.eq(id) }
         }
     }
 }

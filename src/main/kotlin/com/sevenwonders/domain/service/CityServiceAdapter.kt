@@ -15,4 +15,8 @@ class CityServiceAdapter : CityRepository {
     override suspend fun getCity(name: String): List<City> {
         return cityDBService.read(name)
     }
+
+    override suspend fun getCityBy(face: Char): List<City> {
+        return cityDBService.readBy(face)
+    }
 }

@@ -1,16 +1,13 @@
 package com.sevenwonders.domain.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Card(
     val age: Age,
     val color: Color,
     val name: String,
-    val gives: String,
-    val giveQuantity: Int,
     val players: Int,
-    val cost: Int
+    val cost: String,
+    val gives: String,
+    val freeConstructions: String
 ) {
 
     enum class Age {
