@@ -25,6 +25,8 @@ fun Application.configureCitiesResource() {
             if (!c.isNullOrEmpty()){
                 val cities = cityService.getCity(c)
                 call.respond(HttpStatusCode.OK, cities.map { it.toDto() })
+            } else {
+                call.respond(HttpStatusCode.BadRequest)
             }
         }
 
@@ -34,6 +36,8 @@ fun Application.configureCitiesResource() {
             if (face != null ){
                 val cities = cityService.getCityBy(face)
                 call.respond(HttpStatusCode.OK, cities.map { it.toDto() })
+            } else {
+                call.respond(HttpStatusCode.BadRequest)
             }
         }
     }

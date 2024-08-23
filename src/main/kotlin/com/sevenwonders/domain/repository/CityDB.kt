@@ -4,7 +4,6 @@ import com.sevenwonders.domain.model.City
 import com.sevenwonders.utils.Utils.toWonder
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -23,15 +22,6 @@ class CityDB {
 
     private suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }
-
-    suspend fun create(city: City): String = dbQuery {
-        Cities.insert {
-            it[name] = city.name
-            it[resource] = city.resource
-            it[face] = city.face
-            it[wonders] = city.wonders.joinToString("@")
-        }[Cities.name]
-    }
 
     suspend fun read(name: String): List<City> {
         return dbQuery {

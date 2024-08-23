@@ -30,7 +30,7 @@ object Utils {
 
         return CityToSave(
             name = data[0],
-            resource = convertGivePart(data[1][0]),
+            resource = convertElement(data[1]),
             face = data[2].toCharArray().first(),
             wonders = data[3]
         )
@@ -110,20 +110,5 @@ object Utils {
         }
 
         return wc.trim()
-    }
-
-    private fun convertGivePart(givePart: Char) = when (givePart) {
-        'A' -> "argile"
-        'P' -> "pierre"
-        'G' -> "minerai"
-        'B' -> "bois"
-        'T' -> "tissu"
-        'V' -> "verre"
-        'R' -> "papyrus"
-        'M' -> "pieces"
-        'W' -> "wonders"
-
-        'O' -> " ou "
-        else -> ""
     }
 }

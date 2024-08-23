@@ -70,11 +70,5 @@ fun Application.configureDatabases() {
 //            sevenUserDBService.update(id, user)
 //            call.respond(HttpStatusCode.OK)
 //        }
-//
-//        delete("/users/{id}") {
-//            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-//            sevenUserDBService.delete(id)
-//            call.respond(HttpStatusCode.OK)
-//        }
 //    }
 }

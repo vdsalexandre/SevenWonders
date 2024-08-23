@@ -15,4 +15,16 @@ class CardServiceAdapter : CardRepository {
     override suspend fun getCardsBy(color: Card.Color): List<Card> {
         return cardDBService.readBy(color)
     }
+
+    override suspend fun getCardsByPlayers(players: Int): List<Card> {
+        return cardDBService.readByPlayers(players)
+    }
+
+    override suspend fun getCardsByAge(age: Card.Age): List<Card> {
+        return cardDBService.readByAge(age)
+    }
+
+    override suspend fun getCardsByAgeAndPlayers(age: Card.Age, players: Int): List<Card> {
+        return cardDBService.readByAgeAndPlayers(age, players)
+    }
 }
