@@ -4,11 +4,11 @@ import com.sevenwonders.domain.model.Card
 import com.sevenwonders.domain.model.SevenUserDB
 import com.sevenwonders.utils.Utils.toElement
 import kotlinx.coroutines.Dispatchers
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -32,118 +32,52 @@ class CardDB {
     private suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }
 
-    suspend fun create(card: Card): String = dbQuery {
-        Cards.insert {
-            it[age] = card.age
-            it[color] = card.color
-            it[name] = card.name
-            it[players] = card.players
-            it[cost] = card.cost
-            it[gives] = card.gives
-            it[freeConstructions] = card.freeConstructions
-        }[Cards.name]
-    }
-
     suspend fun read(id: Int): Card? {
         return dbQuery {
-            Cards.select { Cards.id eq id }
-                .map {
-                    Card(
-                        it[Cards.age],
-                        it[Cards.color],
-                        it[Cards.name],
-                        it[Cards.players],
-                        it[Cards.cost],
-                        it[Cards.gives],
-                        it[Cards.freeConstructions],
-                    )
-                }
+            Cards
+                .select { Cards.id eq id }
+                .map { toCard(it) }
                 .singleOrNull()
         }
     }
 
     suspend fun readAll(): List<Card> {
         return dbQuery {
-            Cards.selectAll()
-                .map {
-                    Card(
-                        it[Cards.age],
-                        it[Cards.color],
-                        it[Cards.name],
-                        it[Cards.players],
-                        it[Cards.cost].toElement(),
-                        it[Cards.gives].toElement(),
-                        it[Cards.freeConstructions],
-                    )
-                }
+            Cards
+                .selectAll()
+                .map { toCard(it) }
         }
     }
 
     suspend fun readBy(color: Card.Color): List<Card> {
         return dbQuery {
-            Cards.select { Cards.color eq color }
-                .map {
-                    Card(
-                        it[Cards.age],
-                        it[Cards.color],
-                        it[Cards.name],
-                        it[Cards.players],
-                        it[Cards.cost].toElement(),
-                        it[Cards.gives].toElement(),
-                        it[Cards.freeConstructions],
-                    )
-                }
+            Cards
+                .select { Cards.color eq color }
+                .map { toCard(it) }
         }
     }
 
     suspend fun readByPlayers(players: Int): List<Card> {
         return dbQuery {
-            Cards.select { Cards.players lessEq players }
-                .map {
-                    Card(
-                        it[Cards.age],
-                        it[Cards.color],
-                        it[Cards.name],
-                        it[Cards.players],
-                        it[Cards.cost].toElement(),
-                        it[Cards.gives].toElement(),
-                        it[Cards.freeConstructions],
-                    )
-                }
+            Cards
+                .select { Cards.players lessEq players }
+                .map { toCard(it) }
         }
     }
 
     suspend fun readByAge(age: Card.Age): List<Card> {
         return dbQuery {
-            Cards.select { Cards.age eq age }
-                .map {
-                    Card(
-                        it[Cards.age],
-                        it[Cards.color],
-                        it[Cards.name],
-                        it[Cards.players],
-                        it[Cards.cost].toElement(),
-                        it[Cards.gives].toElement(),
-                        it[Cards.freeConstructions],
-                    )
-                }
+            Cards
+                .select { Cards.age eq age }
+                .map { toCard(it) }
         }
     }
 
     suspend fun readByAgeAndPlayers(age: Card.Age, players: Int): List<Card> {
         return dbQuery {
-            Cards.select { Cards.age eq age and (Cards.players lessEq players) }
-                .map {
-                    Card(
-                        it[Cards.age],
-                        it[Cards.color],
-                        it[Cards.name],
-                        it[Cards.players],
-                        it[Cards.cost].toElement(),
-                        it[Cards.gives].toElement(),
-                        it[Cards.freeConstructions],
-                    )
-                }
+            Cards
+                .select { Cards.age eq age and (Cards.players lessEq players) }
+                .map { toCard(it) }
         }
     }
 
@@ -166,4 +100,14 @@ class CardDB {
             Cards.deleteWhere { Cards.id.eq(id) }
         }
     }
+
+    private fun toCard(row: ResultRow) = Card(
+        row[Cards.age],
+        row[Cards.color],
+        row[Cards.name],
+        row[Cards.players],
+        row[Cards.cost].toElement(),
+        row[Cards.gives].toElement(),
+        row[Cards.freeConstructions],
+    )
 }

@@ -2,6 +2,7 @@ package com.sevenwonders
 
 import com.sevenwonders.api.resource.configureCardsResource
 import com.sevenwonders.api.resource.configureCitiesResource
+import com.sevenwonders.api.resource.configureStaticResource
 import com.sevenwonders.bootstrap.configKoinModule
 import com.sevenwonders.bootstrap.configureDatabases
 import com.sevenwonders.bootstrap.configureSerialization
@@ -18,4 +19,5 @@ fun Application.module() {
 //    configureSecurity()
     configureCardsResource()
     configureCitiesResource()
+    configureStaticResource()
 }
